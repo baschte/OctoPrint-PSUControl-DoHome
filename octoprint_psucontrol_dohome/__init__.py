@@ -68,6 +68,7 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
             }
         }
 
+
         response = None
         try:
             response = requests.get(url, params)
@@ -80,13 +81,9 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
             self._logger.exception("Exception while making API call")
         else:
             self._logger.debug("cmd={}, status_code={}, text={}".format(cmd, response.status_code, response.text))
+            self._logger.debug(params)
+            self._logger.debug(url)
 
-            if response.status_code == 401:
-                self._logger.warning("Server returned 401 Unauthorized. Check credentials.")
-                response = None
-
-        self._logger.debug("response")
-        self._logger.debug(response)
         return response
 
 
