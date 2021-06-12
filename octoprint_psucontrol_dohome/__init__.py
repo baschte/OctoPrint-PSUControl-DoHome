@@ -1,14 +1,14 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-__author__ = "Shawn Bruce <kantlivelong@gmail.com>"
+__author__ = "Sebastian Richter <info@baschte.de>"
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
-__copyright__ = "Copyright (C) 2021 Shawn Bruce - Released under terms of the AGPLv3 License"
+__copyright__ = "Copyright (C) 2021 Sebastian Richter - Released under terms of the AGPLv3 License"
 
 import octoprint.plugin
 import requests
 
-class PSUControl_Tasmota(octoprint.plugin.StartupPlugin,
+class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
                          octoprint.plugin.RestartNeedingPlugin,
                          octoprint.plugin.TemplatePlugin,
                          octoprint.plugin.SettingsPlugin):
@@ -19,11 +19,9 @@ class PSUControl_Tasmota(octoprint.plugin.StartupPlugin,
 
     def get_settings_defaults(self):
         return dict(
-            address = '',
+            device_id = '',
+            device_key = '',
             plug = 1,
-            enable_auth = False,
-            username = 'admin',
-            password = ''
         )
 
 
@@ -57,17 +55,12 @@ class PSUControl_Tasmota(octoprint.plugin.StartupPlugin,
 
 
     def send(self, cmd):
-        url = "http://{}/cm".format(self.config['address'])
-
-        params = dict(cmnd=cmd, timeout=5)
-
-        if self.config['enable_auth']:
-            params['user'] = self.config['username']
-            params['password'] = self.config['password']
+        #url = "http://{}/cm".format(self.config['address'])
+        url = "http://dohome.doit.am/mobile_app/publish.php?cmd=publish&device_id={}&device_key={}&message={}".format(self.config['device_id'],self.config['device_key'],cmd)
 
         response = None
         try:
-            response = requests.get(url, params=params)
+            response = requests.get(url)
         except (
                 requests.exceptions.InvalidURL,
                 requests.exceptions.ConnectionError
@@ -86,45 +79,45 @@ class PSUControl_Tasmota(octoprint.plugin.StartupPlugin,
 
 
     def change_psu_state(self, state):
-        cmd = "Power{} {}".format(self.config['plug'], state)
+        cmd = "'cmd':5,'op':{}".format(state)
         self.send(cmd)
 
 
     def turn_psu_on(self):
         self._logger.debug("Switching PSU On")
-        self.change_psu_state('on')
+        self.change_psu_state(1)
 
 
     def turn_psu_off(self):
         self._logger.debug("Switching PSU Off")
-        self.change_psu_state('off')
+        self.change_psu_state(0)
 
 
-    def get_psu_state(self):
-        cmd = "Status 0"
-
-        response = self.send(cmd)
-        if not response:
-            return False
-        data = response.json()
-
-        status = None
-        try:
-            status = (data['StatusSTS']['POWER' + str(self.config['plug'])] == 'ON')
-        except KeyError:
-            pass
-
-        if status == None and self.config['plug'] == 1:
-            try:
-                status = (data['StatusSTS']['POWER'] == 'ON')
-            except KeyError:
-                pass
-
-        if status == None:
-            self._logger.error("Unable to determine status. Check settings.")
-            status = False
-
-        return status
+    #def get_psu_state(self):
+    #    cmd = "Status 0"
+#
+    #    response = self.send(cmd)
+    #    if not response:
+    #        return False
+    #    data = response.json()
+#
+    #    status = None
+    #    try:
+    #        status = (data['StatusSTS']['POWER' + str(self.config['plug'])] == 'ON')
+    #    except KeyError:
+    #        pass
+#
+    #    if status == None and self.config['plug'] == 1:
+    #        try:
+    #            status = (data['StatusSTS']['POWER'] == 'ON')
+    #        except KeyError:
+    #            pass
+#
+    #    if status == None:
+    #        self._logger.error("Unable to determine status. Check settings.")
+    #        status = False
+#
+    #    return status
 
 
     def on_settings_save(self, data):
@@ -148,27 +141,27 @@ class PSUControl_Tasmota(octoprint.plugin.StartupPlugin,
 
     def get_update_information(self):
         return dict(
-            psucontrol_tasmota=dict(
-                displayName="PSU Control - Tasmota",
+            psucontrol_dohome=dict(
+                displayName="PSU Control - DoHome",
                 displayVersion=self._plugin_version,
 
                 # version check: github repository
                 type="github_release",
-                user="kantlivelong",
-                repo="OctoPrint-PSUControl-Tasmota",
+                user="baschte",
+                repo="OctoPrint-PSUControl-DoHome",
                 current=self._plugin_version,
 
                 # update method: pip w/ dependency links
-                pip="https://github.com/kantlivelong/OctoPrint-PSUControl-Tasmota/archive/{target_version}.zip"
+                pip="https://github.com/baschte/OctoPrint-PSUControl-Tasmota/archive/{target_version}.zip"
             )
         )
 
-__plugin_name__ = "PSU Control - Tasmota"
+__plugin_name__ = "PSU Control - DoHome"
 __plugin_pythoncompat__ = ">=2.7,<4"
 
 def __plugin_load__():
     global __plugin_implementation__
-    __plugin_implementation__ = PSUControl_Tasmota()
+    __plugin_implementation__ = PSUControl_DoHome()
 
     global __plugin_hooks__
     __plugin_hooks__ = {

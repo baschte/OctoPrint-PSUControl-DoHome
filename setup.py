@@ -3,14 +3,14 @@ import setuptools
 
 ########################################################################################################################
 
-plugin_identifier = "psucontrol_tasmota"
+plugin_identifier = "psucontrol_dohome"
 plugin_package = "octoprint_%s" % plugin_identifier
-plugin_name = "OctoPrint-PSUControl-Tasmota"
-plugin_version = "1.0.1"
-plugin_description = "Adds Tasmota Smart Plug support to OctoPrint-PSUControl as a sub-plugin"
-plugin_author = "Shawn Bruce"
-plugin_author_email = "kantlivelong@gmail.com"
-plugin_url = "https://github.com/kantlivelong/OctoPrint-PSUControl-Tasmota"
+plugin_name = "OctoPrint-PSUControl-DoHome"
+plugin_version = "0.0.1"
+plugin_description = "Adds DoHome Smart Plug support to OctoPrint-PSUControl as a sub-plugin"
+plugin_author = "Sebastian Richter"
+plugin_author_email = "info@baschte.de"
+plugin_url = "https://github.com/baschte/OctoPrint-PSUControl-Tasmota"
 plugin_license = "AGPLv3"
 plugin_additional_data = []
 

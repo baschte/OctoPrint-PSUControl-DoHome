@@ -1,5 +1,5 @@
-# OctoPrint PSU Control - Tasmota
-Adds Tasmota Smart Plug support to OctoPrint-PSUControl as a sub-plugin
+# OctoPrint PSU Control - DoHome
+Adds DoHome Smart Plug support to OctoPrint-PSUControl as a sub-plugin
 
 ## Setup
 - Install the plugin using Plugin Manager from Settings
