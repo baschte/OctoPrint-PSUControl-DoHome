@@ -85,6 +85,8 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
                 self._logger.warning("Server returned 401 Unauthorized. Check credentials.")
                 response = None
 
+        self._logger.debug("response")
+        self._logger.debug(response)
         return response
 
 
