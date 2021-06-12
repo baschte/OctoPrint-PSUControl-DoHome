@@ -58,11 +58,15 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
         #url = "http://{}/cm".format(self.config['address'])
         url = "http://dohome.doit.am/mobile_app/publish.php"
 
-        params = dict(cmd='publish')
-
-        params['device_id'] = self.config['device_id']
-        params['device_key'] = self.config['device_key']
-        params['message'] = cmd
+        params = {
+            "cmd":"publish",
+            "device_id": self.config['device_id'],
+            "device_key": self.config['device_key'],
+            "message": {
+                "cmd": 5,
+                "op": cmd
+            }
+        }
 
         response = None
         try:
@@ -85,7 +89,7 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
 
 
     def change_psu_state(self, state):
-        cmd = '"cmd":5,"op":{}'.format(state)
+        cmd = state
         self.send(cmd)
 
 
