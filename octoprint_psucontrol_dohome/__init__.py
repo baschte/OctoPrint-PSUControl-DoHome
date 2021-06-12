@@ -56,8 +56,9 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
 
     def send(self, cmd):
         #url = "http://{}/cm".format(self.config['address'])
-        url = "http://dohome.doit.am/mobile_app/publish.php"
-        message = '{ "cmd": 5, "op":{} }'.format(cmd)
+        #url = "http://dohome.doit.am/mobile_app/publish.php"
+        #message = '{ "cmd": 5, "op":{} }'.format(cmd)
+        url = "http://dohome.doit.am/mobile_app/publish.php?cmd=publish&device_id=d8f15bfe65ae_DT-PLUG_HOMEKIT&device_key=63d42bb2dca28380474ee8b1a8e0bf24&message={\"cmd\":5,\"op\":{}}".format(cmd)
 
         params = {
             "cmd":"publish",
@@ -69,7 +70,7 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
 
         response = None
         try:
-            response = requests.get(url, params=params)
+            response = requests.get(url)
         except (
                 requests.exceptions.InvalidURL,
                 requests.exceptions.ConnectionError
@@ -78,6 +79,7 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
         except Exception:
             self._logger.exception("Exception while making API call")
         else:
+            self._logger.debug("url={}".format(url))
             self._logger.debug("cmd={}, status_code={}, text={}".format(cmd, response.status_code, response.text))
         return response
 
