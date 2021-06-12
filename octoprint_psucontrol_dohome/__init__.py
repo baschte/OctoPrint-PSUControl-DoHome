@@ -96,12 +96,12 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
 
 
     def turn_psu_on(self):
-        self._logger.debug("Switching PSU On")
+        self._logger.debug("Switching PSU On >>>")
         self.change_psu_state(1)
 
 
     def turn_psu_off(self):
-        self._logger.debug("Switching PSU Off")
+        self._logger.debug("Switching PSU Off ><>")
         self.change_psu_state(0)
 
 
