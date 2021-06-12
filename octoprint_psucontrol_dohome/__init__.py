@@ -58,7 +58,8 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
         #url = "http://{}/cm".format(self.config['address'])
         #url = "http://dohome.doit.am/mobile_app/publish.php"
         #message = '{ "cmd": 5, "op":{} }'.format(cmd)
-        url = 'http://dohome.doit.am/mobile_app/publish.php?cmd=publish&device_id=d8f15bfe65ae_DT-PLUG_HOMEKIT&device_key=63d42bb2dca28380474ee8b1a8e0bf24&message={"cmd":5,"op":TOGGLE_VALUE}'.replace('TOGGLE_VALUE', cmd)
+        url = 'http://dohome.doit.am/mobile_app/publish.php'
+        message = '{"cmd":5,"op":TOGGLE_VALUE}'.replace('TOGGLE_VALUE', cmd)
 
         params = {
             "cmd":"publish",
@@ -70,7 +71,7 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
 
         response = None
         try:
-            response = requests.get(url)
+            response = requests.get(url, params = params)
         except (
                 requests.exceptions.InvalidURL,
                 requests.exceptions.ConnectionError
@@ -91,12 +92,12 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
 
     def turn_psu_on(self):
         self._logger.debug("Switching PSU On >>>")
-        self.change_psu_state(1)
+        self.change_psu_state('1')
 
 
     def turn_psu_off(self):
-        self._logger.debug("Switching PSU Off ><>")
-        self.change_psu_state(0)
+        self._logger.debug("Switching PSU Off >>>")
+        self.change_psu_state('0')
 
 
     #def get_psu_state(self):
