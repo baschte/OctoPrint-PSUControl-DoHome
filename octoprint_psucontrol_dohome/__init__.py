@@ -58,7 +58,7 @@ class PSUControl_DoHome(octoprint.plugin.StartupPlugin,
         #url = "http://{}/cm".format(self.config['address'])
         #url = "http://dohome.doit.am/mobile_app/publish.php"
         #message = '{ "cmd": 5, "op":{} }'.format(cmd)
-        url = "http://dohome.doit.am/mobile_app/publish.php?cmd=publish&device_id=d8f15bfe65ae_DT-PLUG_HOMEKIT&device_key=63d42bb2dca28380474ee8b1a8e0bf24&message={\"cmd\":5,\"op\":{}}".format(cmd)
+        url = 'http://dohome.doit.am/mobile_app/publish.php?cmd=publish&device_id=d8f15bfe65ae_DT-PLUG_HOMEKIT&device_key=63d42bb2dca28380474ee8b1a8e0bf24&message={"cmd":5,"op":TOGGLE_VALUE}'.replace('TOGGLE_VALUE', cmd)
 
         params = {
             "cmd":"publish",
